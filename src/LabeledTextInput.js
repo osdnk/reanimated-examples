@@ -5,38 +5,68 @@ import {
   StyleSheet,
 } from 'react-native'
 import { TapGestureHandler, State } from 'react-native-gesture-handler'
-import Animated from 'react-native-reanimated'
+import Animated, { Easing } from 'react-native-reanimated'
 import { colorHSV } from './utils'
 
 const {
   add,
-  Value,
+  and,
+  block,
   Clock,
-  cond,
+  clockRunning,
   color,
+  cond,
   eq,
   event,
   multiply,
+  not,
   set,
+  startClock,
+  stopClock,
+  timing,
+  Value,
 } = Animated
 
 
-const anim = (clock, gestureState) => {
-  return 0
+const anim = (clock, gestureState, active) => {
+  const state = {
+    finished:  new Value(0),
+    position:  new Value(0),
+    time:      new Value(0),
+    frameTime: new Value(0),
+  }
+
+  const config = {
+    duration: 1000,
+    toValue: new Value(1),
+    easing: Easing.in(Easing.ease),
+  }
+
+  return block([
+    cond(
+      and(not(clockRunning(clock)), eq(active, 1)), [
+        startClock(clock),
+      ],
+    ),
+    timing(clock, state, config),
+    cond(state.finished, stopClock(clock)),
+    state.position,
+  ])
 }
 
 class LabeledTextInput extends Component {
-  state = { input: '' }
+  state        = { input: '' }
   gestureState = new Value(-1)
-  clock = new Clock()
+  active       = new Value(0)
+  focused      = new Value(0)
+  clock        = new Clock()
+
   handleStateChange = event([{ nativeEvent: { state: this.gestureState }}])
-  value = anim(this.clock, this.gestureState)
-  active = new Value(0)
-  focused = new Value(0)
+  value = anim(this.clock, this.gestureState, this.active)
 
   handleKeyPress = () => this.active.setValue(1)
-  handleFocus = () => this.focused.setValue(1)
-  handleBlur = () => this.focused.setValue(0)
+  handleFocus    = () => this.focused.setValue(1)
+  handleBlur     = () => this.focused.setValue(0)
 
   handleTextChange = text => {
     if (text.length === 0) {
@@ -58,19 +88,21 @@ class LabeledTextInput extends Component {
     const { placeholder } = this.props
     const { input } = this.state
     return (
-      <Animated.View style={[styles.view, { borderBottomColor }]}>
-        <Animated.Text style={[styles.placeholder, { fontSize, top }]}>
-          {placeholder}
-        </Animated.Text>
-        <TextInput
-          style={styles.input}
-          onKeyPress={this.handleKeyPress}
-          onChangeText={this.handleTextChange}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          value={input}
-        />
-      </Animated.View>
+      <TapGestureHandler onHandlerStateChange={this.handleStateChange}>
+        <Animated.View style={[styles.view, { borderBottomColor }]}>
+          <Animated.Text style={[styles.placeholder, { fontSize, top }]}>
+            {placeholder}
+          </Animated.Text>
+          <TextInput
+            style={styles.input}
+            onKeyPress={this.handleKeyPress}
+            onChangeText={this.handleTextChange}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            value={input}
+          />
+        </Animated.View>
+      </TapGestureHandler>
     )
   }
 }

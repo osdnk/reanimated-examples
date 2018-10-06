@@ -107,9 +107,10 @@ const anim = (clock, gestureState, currentPhase) => {
 }
 
 class StatefulButton extends Component {
-  gestureState = new Value(-1)
+  gestureState   = new Value(-1)
   animationPhase = new Value(0)
-  clock = new Clock()
+  clock          = new Clock()
+
   handleStateChange = event([{ nativeEvent: { state: this.gestureState }}])
   value = anim(this.clock, this.gestureState, this.animationPhase)
 
