@@ -306,14 +306,14 @@
 			remoteGlobalIDString = 2D2A28201D9B03D100D4039D;
 			remoteInfo = "RCTAnimation-tvOS";
 		};
-		77BFBA6F216941550028E2DC /* PBXContainerItemProxy */ = {
+		77521BF62169320F0021CFC4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9587270621C24C5E857C15B2 /* RNGestureHandler.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNGestureHandler;
 		};
-		77BFBA72216941550028E2DC /* PBXContainerItemProxy */ = {
+		77521BF92169320F0021CFC4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D81F368397534DD38FEC03C2 /* RNReanimated.xcodeproj */;
 			proxyType = 2;
@@ -594,7 +594,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		77BFBA44216941530028E2DC /* Recovered References */ = {
+		77521BCB2169320C0021CFC4 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				2D690B4C131D4E2692F7DC61 /* libRNGestureHandler.a */,
@@ -603,18 +603,18 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
 		77BFBA6A216941550028E2DC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				77BFBA70216941550028E2DC /* libRNGestureHandler.a */,
+>>>>>>> master
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		77BFBA6C216941550028E2DC /* Products */ = {
+		77521BF32169320F0021CFC4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				77BFBA73216941550028E2DC /* libRNReanimated.a */,
+				77521BFA2169320F0021CFC4 /* libRNReanimated.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -667,7 +667,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				38DBF4622D0B4C12BE9A40BB /* Resources */,
-				77BFBA44216941530028E2DC /* Recovered References */,
+				77521BCB2169320C0021CFC4 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -782,6 +782,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = MN74JXT5QL;
+					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -854,11 +857,11 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 77BFBA6A216941550028E2DC /* Products */;
+					ProductGroup = 77521BF12169320F0021CFC4 /* Products */;
 					ProjectRef = 9587270621C24C5E857C15B2 /* RNGestureHandler.xcodeproj */;
 				},
 				{
-					ProductGroup = 77BFBA6C216941550028E2DC /* Products */;
+					ProductGroup = 77521BF32169320F0021CFC4 /* Products */;
 					ProjectRef = D81F368397534DD38FEC03C2 /* RNReanimated.xcodeproj */;
 				},
 			);
@@ -1111,18 +1114,18 @@
 			remoteRef = 5E9157341DD0AC6500FF2AA8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		77BFBA70216941550028E2DC /* libRNGestureHandler.a */ = {
+		77521BF72169320F0021CFC4 /* libRNGestureHandler.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNGestureHandler.a;
-			remoteRef = 77BFBA6F216941550028E2DC /* PBXContainerItemProxy */;
+			remoteRef = 77521BF62169320F0021CFC4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		77BFBA73216941550028E2DC /* libRNReanimated.a */ = {
+		77521BFA2169320F0021CFC4 /* libRNReanimated.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNReanimated.a;
-			remoteRef = 77BFBA72216941550028E2DC /* PBXContainerItemProxy */;
+			remoteRef = 77521BF92169320F0021CFC4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
@@ -1352,6 +1355,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = MN74JXT5QL;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
@@ -1375,6 +1379,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MN74JXT5QL;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",

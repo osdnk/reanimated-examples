@@ -40,6 +40,10 @@ const phase = {
   done:   4,
 }
 
+const params = {
+  buttonWidth: 120,
+}
+
 const anim = (clock, gestureState, currentPhase) => {
   const state = {
     finished:  new Value(0),
@@ -49,25 +53,25 @@ const anim = (clock, gestureState, currentPhase) => {
   }
 
   const configFill = {
-    duration: 200,
+    duration: 150,
     toValue: new Value(1),
     easing: Easing.in(Easing.ease),
   }
 
   const configWait = {
-    duration: 600,
+    duration: 700,
     toValue: new Value(1),
     easing: Easing.in(Easing.ease),
   }
 
   const configShrink = {
-    duration: 400,
+    duration: 300,
     toValue: new Value(1),
     easing: Easing.in(Easing.ease),
   }
 
   const configDone = {
-    duration: 600,
+    duration: 500,
     toValue: new Value(1),
     easing: Easing.in(Easing.ease),
   }
@@ -106,8 +110,8 @@ const anim = (clock, gestureState, currentPhase) => {
     ])
 }
 
-class StatefulButton extends Component {
-  gestureState   = new Value(-1)
+class FeedbackButton extends Component {
+  gestureState = new Value(-1)
   animationPhase = new Value(0)
   clock          = new Clock()
 
@@ -120,18 +124,18 @@ class StatefulButton extends Component {
     eq(this.animationPhase, phase.fill),
     // white -> green
     colorHSV(
-      160,
-      multiply(this.value, 0.79),
-      sub(1, multiply(this.value, 0.21)),
+      this.props.h,
+      multiply(this.value, this.props.s),
+      sub(1, multiply(this.value, sub(1, this.props.v))),
     ),
     eq(this.animationPhase, phase.wait),
-    colorHSV(160, 0.79, 0.79),
+    colorHSV(this.props.h, this.props.s, this.props.v),
     eq(this.animationPhase, phase.shrink),
     // green -> white
     colorHSV(
-      160,
-      multiply(0.79, sub(1, this.value)),
-      add(0.79, multiply(this.value, 0.21)),
+      this.props.h,
+      multiply(this.props.s, sub(1, this.value)),
+      add(this.props.v, multiply(this.value, sub(1, this.props.v))),
     ),
     eq(this.animationPhase, phase.done),
     color(255, 255, add(255, multiply(this.value, 0))),
@@ -143,9 +147,9 @@ class StatefulButton extends Component {
       eq(this.animationPhase, phase.fill),
       eq(this.animationPhase, phase.wait),
     ),
-    160,
+    params.buttonWidth,
     eq(this.animationPhase, phase.shrink),
-    max(50, multiply(160, sub(1, this.value))),
+    max(50, multiply(params.buttonWidth, sub(1, this.value))),
     eq(this.animationPhase, phase.done),
     50,
   ])
@@ -165,13 +169,13 @@ class StatefulButton extends Component {
 
   color = match([
     eq(this.animationPhase, phase.idle),
-    colorHSV(160, 0.79, add(0.79, multiply(this.value, 0))),
+    colorHSV(this.props.h, this.props.s, add(this.props.v, multiply(this.value, 0))),
     eq(this.animationPhase, phase.fill),
     // green -> white
     colorHSV(
-      160,
-      multiply(0.79, sub(1, this.value)),
-      add(0.79, multiply(this.value, 0.21)),
+      this.props.h,
+      multiply(this.props.s, sub(1, this.value)),
+      add(this.props.v, multiply(this.value, sub(1, this.props.v))),
     ),
     or(
       eq(this.animationPhase, phase.wait),
@@ -181,7 +185,10 @@ class StatefulButton extends Component {
     color(255, 255, add(255, multiply(this.value, 0))),
   ])
 
-  renderCheckMark = () => <Animated.Text style={styles.check}>🌀</Animated.Text>
+  renderCheckMark = () =>
+    <Animated.Text style={[styles.check, { color: this.props.rgb }]}>
+      🌀
+    </Animated.Text>
 
   renderTitle = () =>
     <Animated.View style={{ ...absoluteCenter, opacity: this.opacity }}>
@@ -212,7 +219,11 @@ class StatefulButton extends Component {
 
     return (
       <TapGestureHandler onHandlerStateChange={this.handleStateChange}>
-        <Animated.View style={[styles.button, { backgroundColor, width }]}>
+        <Animated.View style={[styles.button, {
+          backgroundColor,
+          width,
+          borderColor: this.props.rgb,
+        }]}>
           {renderTitle()}
           {renderCheckView()}
         </Animated.View>
@@ -233,24 +244,25 @@ const absoluteCenter = {
 
 const styles = StyleSheet.create({
   button: {
-    width: 160,
     borderRadius: 25,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgb(43, 203, 150)',
+    shadowColor: 'rgb(77, 105, 249)',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.6,
+    shadowRadius: 15,
   },
   text: {
     fontFamily: 'Rubik',
     fontWeight: '500',
-    fontSize: 20,
+    fontSize: 18,
   },
   check: {
     fontFamily: 'icomoon',
     fontSize: 30,
-    color: 'rgb(43, 203, 150)',
   },
 })
 
-export default StatefulButton
+export default FeedbackButton
