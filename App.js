@@ -10,7 +10,7 @@ class App extends Component {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-        <StatefulButton title="Submit" />
+        <StatefulButton title="Submit" h={0} s={0} v={0} rgb="rgb(0, 0, 0)" />
       </SafeAreaView>
     )
   }
