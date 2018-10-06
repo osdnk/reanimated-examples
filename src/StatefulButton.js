@@ -3,9 +3,12 @@ import {
   View,
   StyleSheet,
 } from 'react-native'
-
 import { TapGestureHandler, State } from 'react-native-gesture-handler'
 import Animated, { Easing } from 'react-native-reanimated'
+import {
+  match,
+  colorHSV,
+} from './utils'
 
 const {
   add,
@@ -28,11 +31,6 @@ const {
   timing,
   Value,
 } = Animated
-
-import {
-  match,
-  colorHSV,
-} from './utils'
 
 const phase = {
   idle:   0,

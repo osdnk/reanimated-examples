@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { SafeAreaView } from 'react-native'
 import StatefulButton from './src/StatefulButton'
+import LabeledTextInput from './src/LabeledTextInput'
 
 class App extends Component {
   render() {
@@ -10,6 +11,7 @@ class App extends Component {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
+        <LabeledTextInput placeholder="Email address" />
         <StatefulButton title="Submit" />
       </SafeAreaView>
     )
