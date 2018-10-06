@@ -4850,6 +4850,11 @@ react-native-gesture-handler@^1.0.7:
     invariant "^2.2.2"
     prop-types "^15.5.10"
 
+react-native-reanimated@^1.0.0-alpha.9:
+  version "1.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.0-alpha.9.tgz#6d3bcc60b258621f6d85e3630614d3532d49c647"
+  integrity sha512-xNY3YrwwDNzRvT+6mpeDUoYY6a3pa5FQVy94yDgDxSNzM3KcxYnHNJtnEHUCWRSdHCsU90yuhcIFpMav7k6yPw==
+
 react-native@0.57.2:
   version "0.57.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.57.2.tgz#6beb2985bd94686087613af8d2af653f5fb61ffa"

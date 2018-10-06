@@ -9,7 +9,8 @@
   "dependencies": {
     "react": "16.5.0",
     "react-native": "0.57.2",
-    "react-native-gesture-handler": "^1.0.7"
+    "react-native-gesture-handler": "^1.0.7",
+    "react-native-reanimated": "^1.0.0-alpha.9"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
