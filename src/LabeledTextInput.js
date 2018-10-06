@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import { TapGestureHandler, State } from 'react-native-gesture-handler'
 import Animated, { Easing } from 'react-native-reanimated'
-import { colorHSV } from './utils'
+import { toUpperCase, colorHSV } from './utils'
 
 const {
   add,
@@ -61,63 +61,31 @@ class LabeledTextInput extends Component {
   gestureState = new Value(-1)
   active       = new Value(0)
   focused      = new Value(0)
-  activeClock  = new Clock()
-  focusedClock = new Clock()
+  clock        = new Clock()
 
   handleStateChange = event([{ nativeEvent: { state: this.gestureState }}])
-  activeValue  = anim(this.activeClock, this.gestureState, this.active)
-  focusedValue = anim(this.focusedClock, this.gestureState, this.focused)
+  focusedValue = anim(this.clock, this.gestureState, this.focused)
 
   handleFocus    = () => this.focused.setValue(1)
   handleBlur     = () => this.focused.setValue(0)
 
   handleTextChange = text => {
     if (text.length === 0) {
-      this.active.setValue(0)
+      this.focused.setValue(0)
     } else {
-      this.active.setValue(1)
+      this.focused.setValue(1)
     }
     this.setState({ input: text })
   }
 
-  fontSize = cond(
-    eq(this.active, 1),
-    sub(18, multiply(this.activeValue, 4)),
-    18,
-  )
-  top = cond(
-    eq(this.active, 1),
-    multiply(18, sub(1, this.activeValue)),
-    18,
-  )
-  color = cond(
-    eq(this.active, 1),
-    colorHSV(160, 0.79, add(0.79, multiply(this.activeValue, 0))),
-    colorHSV(
-      160,
-      multiply(this.activeValue, 0.79),
-      add(0.53, multiply(this.activeValue, sub(0.79, 0.53))),
-    ),
-  )
-  borderBottomColor = cond(
-    eq(this.focused, 1),
-    colorHSV(
-      160,
-      multiply(this.focusedValue, 0.79),
-      sub(0.93, multiply(this.focusedValue, sub(0.93, 0.79))),
-    ),
-    colorHSV(160, 0, 0.93),
-  )
-
   render() {
-    const { fontSize, top, borderBottomColor, color } = this
     const { placeholder, ...props } = this.props
     const { input } = this.state
     return (
       <TapGestureHandler onHandlerStateChange={this.handleStateChange}>
-        <Animated.View style={[styles.view, { borderBottomColor }]}>
-          <Animated.Text style={[styles.placeholder, { fontSize, top, color }]}>
-            {placeholder}
+        <Animated.View style={[styles.view, {  }]}>
+          <Animated.Text style={[styles.placeholder, {  }]}>
+            {toUpperCase(placeholder)}
           </Animated.Text>
           <TextInput
             {...props}
@@ -136,23 +104,30 @@ class LabeledTextInput extends Component {
 const styles = StyleSheet.create({
   view: {
     height: 50,
-    width: 250,
-    justifyContent: 'center',
-    borderBottomWidth: 2,
+    borderRadius: 5,
     marginBottom: 20,
+    width: '100%',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(241, 243, 247)',
   },
   placeholder: {
-    fontSize: 18,
+    fontSize: 10,
+    fontWeight: '500',
     fontFamily: 'Rubik',
     position: 'absolute',
+    color: 'rgb(161, 165, 169)',
+    paddingHorizontal: 8,
+    top: 8,
   },
   input: {
     fontFamily: 'Rubik',
+    // fontWeight: '500',
     fontSize: 18,
     color: '#444',
     width: '100%',
-    height: 40,
-    marginTop: 10,
+    height: 36,
+    marginTop: 16,
+    paddingHorizontal: 8,
   },
 })
 

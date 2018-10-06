@@ -41,7 +41,7 @@ const phase = {
 }
 
 const params = {
-  buttonWidth: 120,
+  buttonWidth: 180,
 }
 
 const anim = (clock, gestureState, currentPhase) => {
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Rubik',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 16,
   },
   check: {
     fontFamily: 'icomoon',
