@@ -20,5 +20,11 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "assets/fonts/rubik",
+      "assets/fonts/icomoon"
+    ]
   }
 }
