@@ -14,13 +14,10 @@ const {
   Clock,
   color,
   cond,
-  concat,
-  debug,
   event,
   eq,
   max,
   min,
-  modulo,
   multiply,
   neq,
   or,
@@ -42,7 +39,7 @@ const phase = {
   fill:   1,
   wait:   2,
   shrink: 3,
-  spin:   4,
+  done:   4,
 }
 
 const anim = (clock, gestureState, currentPhase) => {
@@ -71,7 +68,7 @@ const anim = (clock, gestureState, currentPhase) => {
     easing: Easing.in(Easing.ease),
   }
 
-  const configSpin = {
+  const configDone = {
     duration: 600,
     toValue: new Value(1),
     easing: Easing.in(Easing.ease),
@@ -93,21 +90,19 @@ const anim = (clock, gestureState, currentPhase) => {
         timing(clock, state, configWait),
         eq(currentPhase, phase.shrink),
         timing(clock, state, configShrink),
-        eq(currentPhase, phase.spin),
-        timing(clock, state, configSpin),
+        eq(currentPhase, phase.done),
+        timing(clock, state, configDone),
       ]),
       cond(state.finished, [
         stopClock(clock),
-        debug('cp', currentPhase),
-        debug('', currentPhase),
-        cond(neq(currentPhase, phase.spin), [
+        cond(neq(currentPhase, phase.done), [
           set(state.finished, 0),
           set(state.position, 0),
           set(state.time, 0),
           set(state.frameTime, 0),
           startClock(clock),
         ]),
-        set(currentPhase, min(add(currentPhase, 1), phase.spin)),
+        set(currentPhase, min(add(currentPhase, 1), phase.done)),
       ]),
       state.position,
     ])
@@ -120,94 +115,107 @@ class StatefulButton extends Component {
   handleStateChange = event([{ nativeEvent: { state: this.gestureState }}])
   value = anim(this.clock, this.gestureState, this.animationPhase)
 
+  backgroundColor = match([
+    eq(this.animationPhase, phase.idle),
+    color(255, 255, add(255, multiply(this.value, 0))),
+    eq(this.animationPhase, phase.fill),
+    // white -> green
+    colorHSV(
+      160,
+      multiply(this.value, 0.79),
+      sub(1, multiply(this.value, 0.21)),
+    ),
+    eq(this.animationPhase, phase.wait),
+    colorHSV(160, 0.79, 0.79),
+    eq(this.animationPhase, phase.shrink),
+    // green -> white
+    colorHSV(
+      160,
+      multiply(0.79, sub(1, this.value)),
+      add(0.79, multiply(this.value, 0.21)),
+    ),
+    eq(this.animationPhase, phase.done),
+    color(255, 255, add(255, multiply(this.value, 0))),
+  ])
+
+  width = match([
+    or(
+      eq(this.animationPhase, phase.idle),
+      eq(this.animationPhase, phase.fill),
+      eq(this.animationPhase, phase.wait),
+    ),
+    160,
+    eq(this.animationPhase, phase.shrink),
+    max(50, multiply(160, sub(1, this.value))),
+    eq(this.animationPhase, phase.done),
+    50,
+  ])
+
+  opacity = match([
+    or(
+      eq(this.animationPhase, phase.idle),
+      eq(this.animationPhase, phase.fill),
+      eq(this.animationPhase, phase.wait),
+    ),
+    1,
+    eq(this.animationPhase, phase.shrink),
+    max(0, sub(1, multiply(2, this.value))),
+    eq(this.animationPhase, phase.done),
+    0,
+  ])
+
+  color = match([
+    eq(this.animationPhase, phase.idle),
+    colorHSV(160, 0.79, add(0.79, multiply(this.value, 0))),
+    eq(this.animationPhase, phase.fill),
+    // green -> white
+    colorHSV(
+      160,
+      multiply(0.79, sub(1, this.value)),
+      add(0.79, multiply(this.value, 0.21)),
+    ),
+    or(
+      eq(this.animationPhase, phase.wait),
+      eq(this.animationPhase, phase.shrink),
+      eq(this.animationPhase, phase.done),
+    ),
+    color(255, 255, add(255, multiply(this.value, 0))),
+  ])
+
+  renderCheckMark = () => <Animated.Text style={styles.check}>🌀</Animated.Text>
+
+  renderTitle = () =>
+    <Animated.View style={{ ...absoluteCenter, opacity: this.opacity }}>
+      <Animated.Text style={[styles.text, { color: this.color }]}>
+        {this.props.title}
+      </Animated.Text>
+    </Animated.View>
+
+  renderCheckView = () =>
+    <Animated.View style={[{
+      ...absoluteCenter,
+      opacity: cond(
+        eq(this.animationPhase, phase.done),
+        this.value,
+        0,
+      ),
+    }]}>
+      {this.renderCheckMark()}
+    </Animated.View>
+
   render() {
+    const {
+      backgroundColor,
+      width,
+      renderTitle,
+      renderCheckView,
+    } = this
+
     return (
       <TapGestureHandler onHandlerStateChange={this.handleStateChange}>
-        <Animated.View style={[
-          styles.button, {
-            backgroundColor: match([
-              eq(this.animationPhase, phase.idle),
-              color(255, 255, add(255, multiply(this.value, 0))),
-              eq(this.animationPhase, phase.fill),
-              // white -> green
-              colorHSV(
-                160,
-                multiply(this.value, 0.79),
-                sub(1, multiply(this.value, 0.21)),
-              ),
-              eq(this.animationPhase, phase.wait),
-              colorHSV(160, 0.79, 0.79),
-              eq(this.animationPhase, phase.shrink),
-              // green -> white
-              colorHSV(
-                160,
-                multiply(0.79, sub(1, this.value)),
-                add(0.79, multiply(this.value, 0.21)),
-              ),
-              eq(this.animationPhase, phase.spin),
-              color(255, 255, add(255, multiply(this.value, 0))),
-            ]),
-            width: match([
-              or(
-                eq(this.animationPhase, phase.idle),
-                eq(this.animationPhase, phase.fill),
-                eq(this.animationPhase, phase.wait),
-              ),
-              160,
-              eq(this.animationPhase, phase.shrink),
-              max(50, multiply(160, sub(1, this.value))),
-              eq(this.animationPhase, phase.spin),
-              50,
-            ]),
-          }]}>
-          <Animated.View style={[{
-            ...absoluteCenter,
-            opacity: match([
-              or(
-                eq(this.animationPhase, phase.idle),
-                eq(this.animationPhase, phase.fill),
-                eq(this.animationPhase, phase.wait),
-              ),
-              1,
-              eq(this.animationPhase, phase.shrink),
-              max(0, sub(1, multiply(2, this.value))),
-              eq(this.animationPhase, phase.spin),
-              0,
-            ]),
-          }]}>
-            <Animated.Text style={[
-              styles.text, {
-                color: match([
-                  eq(this.animationPhase, phase.idle),
-                  colorHSV(160, 0.79, add(0.79, multiply(this.value, 0))),
-                  eq(this.animationPhase, phase.fill),
-                  // green -> white
-                  colorHSV(
-                    160,
-                    multiply(0.79, sub(1, this.value)),
-                    add(0.79, multiply(this.value, 0.21)),
-                  ),
-                  or(
-                    eq(this.animationPhase, phase.wait),
-                    eq(this.animationPhase, phase.shrink),
-                    eq(this.animationPhase, phase.spin),
-                  ),
-                  color(255, 255, add(255, multiply(this.value, 0))),
-                ]),
-            }]}>
-              {this.props.title}
-            </Animated.Text>
-          </Animated.View>
-          <Animated.View style={[{
-            ...absoluteCenter,
-            opacity: cond(
-              eq(this.animationPhase, phase.spin),
-              this.value,
-              0,
-            ),
-          }]}>
-            <Animated.Text style={styles.check}>🌀</Animated.Text>
-          </Animated.View>
+        <Animated.View style={[styles.button, { backgroundColor, width }]}>
+          {renderTitle()}
+          {renderCheckView()}
         </Animated.View>
       </TapGestureHandler>
     )
