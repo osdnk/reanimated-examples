@@ -42,6 +42,10 @@ const phase = {
   done:   4,
 }
 
+const params = {
+  buttonWidth: 120,
+}
+
 const anim = (clock, gestureState, currentPhase) => {
   const state = {
     finished:  new Value(0),
@@ -144,9 +148,9 @@ class StatefulButton extends Component {
       eq(this.animationPhase, phase.fill),
       eq(this.animationPhase, phase.wait),
     ),
-    160,
+    params.buttonWidth,
     eq(this.animationPhase, phase.shrink),
-    max(50, multiply(160, sub(1, this.value))),
+    max(50, multiply(params.buttonWidth, sub(1, this.value))),
     eq(this.animationPhase, phase.done),
     50,
   ])
@@ -234,7 +238,6 @@ const absoluteCenter = {
 
 const styles = StyleSheet.create({
   button: {
-    width: 160,
     borderRadius: 25,
     height: 50,
     justifyContent: 'center',
