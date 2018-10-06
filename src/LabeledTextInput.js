@@ -16,6 +16,7 @@ const {
   clockRunning,
   color,
   cond,
+  debug,
   eq,
   event,
   multiply,
@@ -23,12 +24,13 @@ const {
   set,
   startClock,
   stopClock,
+  sub,
   timing,
   Value,
 } = Animated
 
 
-const anim = (clock, gestureState, active) => {
+const anim = (clock, gestureState, condition) => {
   const state = {
     finished:  new Value(0),
     position:  new Value(0),
@@ -44,13 +46,13 @@ const anim = (clock, gestureState, active) => {
 
   return block([
     cond(
-      and(not(clockRunning(clock)), eq(active, 1)), [
+      eq(condition, 1), [
         startClock(clock),
       ],
     ),
     timing(clock, state, config),
     cond(state.finished, stopClock(clock)),
-    state.position,
+    debug('', state.position),
   ])
 }
 
@@ -59,10 +61,12 @@ class LabeledTextInput extends Component {
   gestureState = new Value(-1)
   active       = new Value(0)
   focused      = new Value(0)
-  clock        = new Clock()
+  activeClock  = new Clock()
+  focusedClock = new Clock()
 
   handleStateChange = event([{ nativeEvent: { state: this.gestureState }}])
-  value = anim(this.clock, this.gestureState, this.active)
+  activeValue  = anim(this.activeClock, this.gestureState, this.active)
+  focusedValue = anim(this.focusedClock, this.gestureState, this.focused)
 
   handleKeyPress = () => this.active.setValue(1)
   handleFocus    = () => this.focused.setValue(1)
@@ -75,22 +79,43 @@ class LabeledTextInput extends Component {
     this.setState({ input: text })
   }
 
-  fontSize = cond(eq(this.active, 1), 14, 18)
-  top = cond(eq(this.active, 1), 0, 18)
+  fontSize = cond(
+    eq(this.active, 1),
+    sub(18, multiply(this.activeValue, 4)),
+    18,
+  )
+  top = cond(
+    eq(this.active, 1),
+    multiply(18, sub(1, this.activeValue)),
+    18,
+  )
+  color = cond(
+    eq(this.active, 1),
+    colorHSV(160, 0.79, add(0.79, multiply(this.activeValue, 0))),
+    colorHSV(
+      160,
+      multiply(this.activeValue, 0.79),
+      add(0.53, multiply(this.activeValue, sub(0.79, 0.53))),
+    ),
+  )
   borderBottomColor = cond(
     eq(this.focused, 1),
-    colorHSV(160, 0.79, 0.79),
-    color(230, 230, 230),
+    colorHSV(
+      160,
+      multiply(this.focusedValue, 0.79),
+      sub(0.93, multiply(this.focusedValue, sub(0.93, 0.79))),
+    ),
+    colorHSV(160, 0, 0.93),
   )
 
   render() {
-    const { fontSize, top, borderBottomColor } = this
+    const { fontSize, top, borderBottomColor, color } = this
     const { placeholder, ...props } = this.props
     const { input } = this.state
     return (
       <TapGestureHandler onHandlerStateChange={this.handleStateChange}>
         <Animated.View style={[styles.view, { borderBottomColor }]}>
-          <Animated.Text style={[styles.placeholder, { fontSize, top }]}>
+          <Animated.Text style={[styles.placeholder, { fontSize, top, color }]}>
             {placeholder}
           </Animated.Text>
           <TextInput
@@ -117,16 +142,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   placeholder: {
-    fontFamily: 'Rubik',
     fontSize: 18,
-    color: '#888',
+    fontFamily: 'Rubik',
     position: 'absolute',
-    top: 0,
   },
   input: {
     fontFamily: 'Rubik',
     fontSize: 18,
-    color: '#333',
+    color: '#444',
     width: '100%',
     height: 40,
     marginTop: 10,
