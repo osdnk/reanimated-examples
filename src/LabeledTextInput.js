@@ -39,7 +39,7 @@ const anim = (clock, gestureState, condition) => {
   }
 
   const config = {
-    duration: 1000,
+    duration: 300,
     toValue: new Value(1),
     easing: Easing.in(Easing.ease),
   }
@@ -68,13 +68,14 @@ class LabeledTextInput extends Component {
   activeValue  = anim(this.activeClock, this.gestureState, this.active)
   focusedValue = anim(this.focusedClock, this.gestureState, this.focused)
 
-  handleKeyPress = () => this.active.setValue(1)
   handleFocus    = () => this.focused.setValue(1)
   handleBlur     = () => this.focused.setValue(0)
 
   handleTextChange = text => {
     if (text.length === 0) {
       this.active.setValue(0)
+    } else {
+      this.active.setValue(1)
     }
     this.setState({ input: text })
   }
@@ -121,7 +122,6 @@ class LabeledTextInput extends Component {
           <TextInput
             {...props}
             style={styles.input}
-            onKeyPress={this.handleKeyPress}
             onChangeText={this.handleTextChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
