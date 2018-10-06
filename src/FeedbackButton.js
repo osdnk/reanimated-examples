@@ -112,7 +112,7 @@ const anim = (clock, gestureState, currentPhase) => {
     ])
 }
 
-class StatefulButton extends Component {
+class FeedbackButton extends Component {
   gestureState = new Value(-1)
   animationPhase = new Value(0)
   clock = new Clock()
@@ -250,11 +250,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
+    shadowColor: 'rgb(77, 105, 249)',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.6,
+    shadowRadius: 15,
   },
   text: {
     fontFamily: 'Rubik',
     fontWeight: '500',
-    fontSize: 20,
+    fontSize: 18,
   },
   check: {
     fontFamily: 'icomoon',
@@ -262,4 +266,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default StatefulButton
+export default FeedbackButton

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { SafeAreaView } from 'react-native'
-import StatefulButton from './src/StatefulButton'
+import FeedbackButton from './src/FeedbackButton'
 
 class App extends Component {
   render() {
@@ -9,8 +9,9 @@ class App extends Component {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#fff',
       }}>
-        <StatefulButton title="Submit" h={0} s={0} v={0} rgb="rgb(0, 0, 0)" />
+        <FeedbackButton title="Submit" h={230} s={0.69} v={0.977} rgb="rgb(77, 105, 249)" />
       </SafeAreaView>
     )
   }
