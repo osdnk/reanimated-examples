@@ -85,7 +85,7 @@ class LabeledTextInput extends Component {
 
   render() {
     const { fontSize, top, borderBottomColor } = this
-    const { placeholder } = this.props
+    const { placeholder, ...props } = this.props
     const { input } = this.state
     return (
       <TapGestureHandler onHandlerStateChange={this.handleStateChange}>
@@ -94,6 +94,7 @@ class LabeledTextInput extends Component {
             {placeholder}
           </Animated.Text>
           <TextInput
+            {...props}
             style={styles.input}
             onKeyPress={this.handleKeyPress}
             onChangeText={this.handleTextChange}
