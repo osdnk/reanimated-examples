@@ -10,6 +10,7 @@ import FeedbackButton from './src/FeedbackButton'
 
 const blue = 'rgb(77, 105, 249)'
 const gray = 'rgb(161, 165, 169)'
+const light = 'rgb(241, 243, 247)'
 
 // Ignore immortal warning.
 import { YellowBox } from 'react-native'
@@ -40,7 +41,7 @@ class App extends Component {
   renderInputs = () =>
     <View>
       <LabeledTextInput
-        placeholder="E-mail address"
+        placeholder="Email address"
         textContentType="emailAddress"
         autoCapitalize="none"
       />
@@ -74,11 +75,23 @@ class App extends Component {
   render() {
     return (
       <SafeAreaView style={styles.areaView}>
-        {this.renderSlogans()}
-        {this.renderInputs()}
-        {this.renderPasswordForgot()}
-        {this.renderSignUpButton()}
-        {this.renderSignUpPrompt()}
+        <View style={{
+          backgroundColor: '#fff',
+          borderRadius: 15,
+          margin: 25,
+          marginTop: 85,
+          padding: 25,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 20 },
+          shadowOpacity: 0.15,
+          shadowRadius: 30,
+        }}>
+          {this.renderSlogans()}
+          {this.renderInputs()}
+          {this.renderPasswordForgot()}
+          {this.renderSignUpButton()}
+          {this.renderSignUpPrompt()}
+        </View>
       </SafeAreaView>
     )
   }
@@ -87,8 +100,7 @@ class App extends Component {
 const styles = StyleSheet.create({
   areaView: {
     flex: 1,
-    backgroundColor: '#fff',
-    margin: 20,
+    backgroundColor: light,
   },
   text: {
     fontFamily: 'Rubik',
@@ -97,26 +109,24 @@ const styles = StyleSheet.create({
   sloganHeader: {
     fontFamily: 'Rubik',
     fontSize: 28,
-    fontWeight: '700',
-    marginTop: 50,
+    fontWeight: '500',
     marginBottom: 20,
   },
   sloganText: {
     fontFamily: 'Rubik',
     fontSize: 16,
-    marginBottom: 60,
+    marginBottom: 30,
     lineHeight: 22,
     color: gray,
   },
   forgotPasswordSection: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginBottom: 50,
+    marginBottom: 30,
   },
   signUpSection: {
     alignItems: 'center',
     paddingTop: 10,
-    marginBottom: 70,
+    marginBottom: 50,
   }
 })
 export default App
